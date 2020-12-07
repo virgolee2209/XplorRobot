@@ -57,9 +57,18 @@ namespace RobotService.Tests
             });
         }
 
-        [DataRow(0,0,FacingDirection.WEST)]
-        [DataRow(0,2, FacingDirection.WEST)]
-        //[DataRow(0, new object[] { 2, "WEST" }, "Middle Left Position")]
+        [DataRow(0, 0, FacingDirection.WEST)]
+        [DataRow(2, 0, FacingDirection.WEST)]
+        [DataRow(4, 0, FacingDirection.WEST)]
+        [DataRow(0, 0, FacingDirection.SOUTH)]
+        [DataRow(0, 2, FacingDirection.SOUTH)]
+        [DataRow(0, 4, FacingDirection.SOUTH)]
+        [DataRow(4, 0, FacingDirection.NORTH)]
+        [DataRow(4, 2, FacingDirection.NORTH)]
+        [DataRow(4, 4, FacingDirection.NORTH)]
+        [DataRow(0, 4, FacingDirection.EAST)]
+        [DataRow(2, 4, FacingDirection.EAST)]
+        [DataRow(4, 4, FacingDirection.EAST)]
         [DataTestMethod]
         //[TestMethod]
         public void GameTests_PlaceRobotOnTheEdgeThenMove_GameRobotCannotMoveException(int x, int y, FacingDirection face)

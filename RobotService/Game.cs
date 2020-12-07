@@ -15,10 +15,6 @@ namespace RobotService
         }
         public void SendCommand(GameEvent gameEvent)
         {
-            if (currentPosition == null)
-            {
-                Console.WriteLine("No move is made");
-            }
             eventList.Add(gameEvent);
             switch (gameEvent.GetGameCommand())
             {
@@ -45,7 +41,7 @@ namespace RobotService
                 case Commands.REPORT:
                 default:
                     {
-                        ReportCurrentPosition();
+                        Console.WriteLine(ReportCurrentPosition());
                         break;
                     }
             }
@@ -62,7 +58,7 @@ namespace RobotService
             {
                 throw new GameNotStartedException();
             }
-            RobotPosition nextPosition = currentPosition;
+            RobotPosition nextPosition = new RobotPosition(currentPosition.ToString());
             nextPosition.Move();
             if (!isPositionValid(nextPosition)) throw new GameRobotCannotMoveException();
             currentPosition = nextPosition;
@@ -87,7 +83,7 @@ namespace RobotService
             }
             currentPosition.Turn();
         }
-        private string ReportCurrentPosition()
+        public string ReportCurrentPosition()
         {
             if (!isGameStarted())
             {

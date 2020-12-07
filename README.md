@@ -1,5 +1,3 @@
-# XplorRobot
-
 Toy Robot Simulator
 ===================
 

@@ -29,7 +29,7 @@ namespace RobotService
             FacingDirection facing;
             if (!Enum.TryParse<FacingDirection>(paramList[2], true, out facing))
             {
-                throw new GameCommandParameterInvalidException("Parameter F in (X,Y,F) must be a valid direction (North, South, East, West");
+                throw new GameCommandParameterInvalidException("Parameter F in (X,Y,F) must be a valid direction (North, South, East, West)");
             }
             Face = facing;
         }

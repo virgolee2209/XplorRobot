@@ -5,15 +5,38 @@ namespace XplorRobot
 {
     class Program
     {
+        const string QUIT_COMMAND="q";
         static void Main(string[] args)
         {
-            Console.WriteLine("\nWhat is your name? ");
-            var name = Console.ReadLine();
-            var date = DateTime.Now;
-            Console.WriteLine($"\nHello, {name}, on {date:d} at {date:t}!");
-            Console.Write("\nPress any key to exit...");
-            Class1 c = new Class1("");
-            Console.ReadKey(true);
+            Console.WriteLine("New game is starting...");
+            Game game= new Game();
+            Console.WriteLine("Game is ready");
+            string command=string.Empty;
+            do
+            {
+                Console.WriteLine($"Please enter your command (press '{QUIT_COMMAND}' to exit):");
+                command=Console.ReadLine();
+                if(IsQuitCommand(command))
+                {
+                    break;
+                    
+                }
+                try
+                {
+                    game.SendCommand(new GameEvent(command));
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("*** "+ ex.Message);
+                }
+            }
+            while(true);
+            Console.WriteLine("Thanks for playing!!!");
+            
+        }
+        private static bool IsQuitCommand(string command)
+        {
+            return command.Equals(QUIT_COMMAND,StringComparison.CurrentCultureIgnoreCase);
         }
     }
 }

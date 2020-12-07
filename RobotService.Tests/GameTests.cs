@@ -85,7 +85,7 @@ namespace RobotService.Tests
             Assert.ThrowsException<GameRobotCannotMoveException>(() => {
                 game.SendCommand(moveEvent);
             });
-
+            Assert.AreEqual(placeRobotOnTheEdge.GetRobotPosition().ToString(),game.ReportCurrentPosition());
             //placeRobotOnTheEdge = new GameEvent("PLACE 0,2,WEST");
             //Assert.ThrowsException<GameRobotCannotMoveException>(() => {
             //    game.SendCommand(moveEvent);

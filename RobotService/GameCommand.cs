@@ -17,10 +17,10 @@ namespace RobotService
     }
     public enum FacingDirection
     {
-        SOUTH,
-        NORTH,
-        EAST,
-        WEST
+        SOUTH=0,
+        NORTH=2,
+        EAST=3,
+        WEST=1
     }
     #region Exceptions
     public class GameCommandInvalidException:Exception

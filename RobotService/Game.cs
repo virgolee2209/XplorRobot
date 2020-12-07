@@ -56,6 +56,7 @@ namespace RobotService
 
         private void DoPlace(RobotPosition newPosition)
         {
+            if (!isPositionValid(newPosition)) throw new GameRobotPlaceOutsideTableException();
             currentPosition = newPosition;
         }
         private void MakeAMove()
@@ -64,6 +65,10 @@ namespace RobotService
             {
                 throw new GameNotStartedException();
             }
+            RobotPosition nextPosition = currentPosition;
+            nextPosition.Move();
+            if (!isPositionValid(nextPosition)) throw new GameRobotCannotMoveException();
+            currentPosition = nextPosition;
         }
 
         private void TurnLeft()
@@ -75,6 +80,7 @@ namespace RobotService
             //switch (currentPosition.Face)
             //{
             //}
+            currentPosition.Turn(isClockwise:false);
         }
         private void TurnRight()
         {
@@ -82,21 +88,31 @@ namespace RobotService
             {
                 throw new GameNotStartedException();
             }
+            currentPosition.Turn();
         }
-        private void ReportCurrentPosition()
+        private string ReportCurrentPosition()
         {
             if (!isGameStarted())
             {
                 throw new GameNotStartedException();
             }
+            return currentPosition.ToString();
         }
 
         private bool isGameStarted()
         {
             return currentPosition != null;
         }
+        private bool isPositionValid(RobotPosition position)
+        {
+            if (position.PositionX < 0 || position.PositionX >= TABLE_HEIGHT
+                || position.PositionY < 0 || position.PositionY >= TABLE_WIDTH)
+            {
+                return false;
+            }
+            return true;
+        }
 
-        
     }
 
     public class GameNotStartedException : Exception

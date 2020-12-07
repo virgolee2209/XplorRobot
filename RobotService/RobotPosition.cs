@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+
 namespace RobotService
 {
     public class RobotPosition
@@ -31,6 +33,56 @@ namespace RobotService
             }
             Face = facing;
         }
-
+        public void Move()
+        {
+            switch (Face)
+            {
+                case FacingDirection.EAST:
+                    PositionY++;
+                    break;
+                case FacingDirection.NORTH:
+                    PositionX++;
+                    break;
+                case FacingDirection.SOUTH:
+                    PositionX--;
+                    break;
+                case FacingDirection.WEST:
+                default:
+                    PositionY--;
+                    break;
+            }
+        }
+        public void Turn(bool isClockwise=true)
+        {
+            int minFace = Enum.GetValues(typeof(FacingDirection)).Cast<int>().Min();
+            int maxFace = Enum.GetValues(typeof(FacingDirection)).Cast<int>().Max();
+            if (isClockwise)
+            {
+                if ((int)Face == maxFace)
+                {
+                    Face = (FacingDirection)minFace;
+                }
+                else
+                {
+                    Face = Face++;
+                }
+                
+            }
+            else
+            {
+                if ((int)Face == minFace)
+                {
+                    Face = (FacingDirection)maxFace;
+                }
+                else
+                {
+                    Face = Face--;
+                }
+            }
+        }
+        public override string ToString()
+        {
+            return $"{PositionX},{PositionY},{Face.ToString()}";
+        }
     }
 }

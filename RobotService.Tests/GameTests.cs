@@ -10,7 +10,7 @@ namespace RobotService.Tests
         public void GameTests_NoPlace_Move_GameNotStartedException()
         {
             Game game = new Game();
-            Assert.ThrowsException<GameNotStartedException>(()=> {
+            Assert.ThrowsException<GameNotStartedException>(() => {
                 game.SendCommand(new GameEvent("move"));
             });
         }
@@ -57,21 +57,32 @@ namespace RobotService.Tests
             });
         }
 
-        [TestMethod]
-        public void GameTests_PlaceRobotOnTheEdgeThenMove_GameRobotCannotMoveException()
+        [DataRow(0,0,FacingDirection.WEST)]
+        [DataRow(0,2, FacingDirection.WEST)]
+        //[DataRow(0, new object[] { 2, "WEST" }, "Middle Left Position")]
+        [DataTestMethod]
+        public void GameTests_PlaceRobotOnTheEdgeThenMove_GameRobotCannotMoveException(int x, int y, FacingDirection face)
         {
             Game game = new Game();
-            GameEvent placeRobotOnTheEdge = new GameEvent("PLACE 0,0,WEST");
+            string placeCommand = $"PLACE {x},{y},{face.ToString()}";
+            //GameEvent placeRobotOnTheEdge = new GameEvent("PLACE 0,0,WEST");
+            GameEvent placeRobotOnTheEdge = new GameEvent(placeCommand);
             game.SendCommand(placeRobotOnTheEdge);
             GameEvent moveEvent = new GameEvent("MOVE");
             Assert.ThrowsException<GameRobotCannotMoveException>(() => {
                 game.SendCommand(moveEvent);
             });
 
-            placeRobotOnTheEdge = new GameEvent("PLACE 0,3,WEST");
-            Assert.ThrowsException<GameRobotCannotMoveException>(() => {
-                game.SendCommand(moveEvent);
-            });
+            //placeRobotOnTheEdge = new GameEvent("PLACE 0,2,WEST");
+            //Assert.ThrowsException<GameRobotCannotMoveException>(() => {
+            //    game.SendCommand(moveEvent);
+            //});
+
+            //placeRobotOnTheEdge = new GameEvent("PLACE 0,5,WEST");
+            //Assert.ThrowsException<GameRobotCannotMoveException>(() => {
+            //    game.SendCommand(moveEvent);
+            //});
         }
+
     }
 }

@@ -13,7 +13,7 @@ namespace RobotService
         {
             eventList = new List<GameEvent>();
         }
-        public void SendCommand(GameEvent gameEvent)
+        public void ReceiveEvent(GameEvent gameEvent)
         {
             eventList.Add(gameEvent);
             switch (gameEvent.GetGameCommand())
@@ -98,8 +98,8 @@ namespace RobotService
         }
         private bool isPositionValid(RobotPosition position)
         {
-            if (position.PositionX < 0 || position.PositionX >= TABLE_HEIGHT
-                || position.PositionY < 0 || position.PositionY >= TABLE_WIDTH)
+            if (position.PositionY < 0 || position.PositionY >= TABLE_HEIGHT
+                || position.PositionX < 0 || position.PositionX >= TABLE_WIDTH)
             {
                 return false;
             }

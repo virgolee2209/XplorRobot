@@ -11,7 +11,7 @@ namespace RobotService.Tests
         {
             Game game = new Game();
             Assert.ThrowsException<GameNotStartedException>(() => {
-                game.SendCommand(new GameEvent("move"));
+                game.ReceiveEvent(new GameEvent("move"));
             });
         }
 
@@ -20,7 +20,7 @@ namespace RobotService.Tests
         {
             Game game = new Game();
             Assert.ThrowsException<GameNotStartedException>(() => {
-                game.SendCommand(new GameEvent("left"));
+                game.ReceiveEvent(new GameEvent("left"));
             });
         }
 
@@ -29,7 +29,7 @@ namespace RobotService.Tests
         {
             Game game = new Game();
             Assert.ThrowsException<GameNotStartedException>(() => {
-                game.SendCommand(new GameEvent("right"));
+                game.ReceiveEvent(new GameEvent("right"));
             });
         }
 
@@ -38,7 +38,7 @@ namespace RobotService.Tests
         {
             Game game = new Game();
             Assert.ThrowsException<GameNotStartedException>(() => {
-                game.SendCommand(new GameEvent("report"));
+                game.ReceiveEvent(new GameEvent("report"));
             });
         }
 
@@ -48,26 +48,26 @@ namespace RobotService.Tests
             Game game = new Game();
             GameEvent outOfRangeEvent = new GameEvent("PLACE 6,0,EAST");
             Assert.ThrowsException<GameRobotPlaceOutsideTableException>(() => {
-                game.SendCommand(outOfRangeEvent);
+                game.ReceiveEvent(outOfRangeEvent);
             });
 
             outOfRangeEvent = new GameEvent("PLACE 0,6,EAST");
             Assert.ThrowsException<GameRobotPlaceOutsideTableException>(() => {
-                game.SendCommand(outOfRangeEvent);
+                game.ReceiveEvent(outOfRangeEvent);
             });
         }
 
         [DataRow(0, 0, FacingDirection.WEST)]
-        [DataRow(2, 0, FacingDirection.WEST)]
-        [DataRow(4, 0, FacingDirection.WEST)]
+        [DataRow(0, 2, FacingDirection.WEST)]
+        [DataRow(0, 4, FacingDirection.WEST)]
         [DataRow(0, 0, FacingDirection.SOUTH)]
-        [DataRow(0, 2, FacingDirection.SOUTH)]
-        [DataRow(0, 4, FacingDirection.SOUTH)]
-        [DataRow(4, 0, FacingDirection.NORTH)]
-        [DataRow(4, 2, FacingDirection.NORTH)]
+        [DataRow(2, 0, FacingDirection.SOUTH)]
+        [DataRow(4, 0, FacingDirection.SOUTH)]
+        [DataRow(0, 4, FacingDirection.NORTH)]
+        [DataRow(2, 4, FacingDirection.NORTH)]
         [DataRow(4, 4, FacingDirection.NORTH)]
-        [DataRow(0, 4, FacingDirection.EAST)]
-        [DataRow(2, 4, FacingDirection.EAST)]
+        [DataRow(4, 0, FacingDirection.EAST)]
+        [DataRow(4, 2, FacingDirection.EAST)]
         [DataRow(4, 4, FacingDirection.EAST)]
         [DataTestMethod]
         //[TestMethod]
@@ -80,22 +80,78 @@ namespace RobotService.Tests
             string placeCommand = $"PLACE {x},{y},{face.ToString()}";
             //GameEvent placeRobotOnTheEdge = new GameEvent("PLACE 0,0,WEST");
             GameEvent placeRobotOnTheEdge = new GameEvent(placeCommand);
-            game.SendCommand(placeRobotOnTheEdge);
+            game.ReceiveEvent(placeRobotOnTheEdge);
             GameEvent moveEvent = new GameEvent("MOVE");
             Assert.ThrowsException<GameRobotCannotMoveException>(() => {
-                game.SendCommand(moveEvent);
+                game.ReceiveEvent(moveEvent);
             });
+            
             Assert.AreEqual(placeRobotOnTheEdge.GetRobotPosition().ToString(),game.ReportCurrentPosition());
-            //placeRobotOnTheEdge = new GameEvent("PLACE 0,2,WEST");
-            //Assert.ThrowsException<GameRobotCannotMoveException>(() => {
-            //    game.SendCommand(moveEvent);
-            //});
-
-            //placeRobotOnTheEdge = new GameEvent("PLACE 0,5,WEST");
-            //Assert.ThrowsException<GameRobotCannotMoveException>(() => {
-            //    game.SendCommand(moveEvent);
-            //});
+            
         }
-
+        [DataRow(new string[]{
+            "PLACE 0,0,NORTH",
+            "MOVE",
+            "REPORT"
+        }, "0,1,NORTH")]//example a
+        [DataRow(new string[]{
+            "PLACE 0,0,NORTH",
+            "LEFT",
+            "REPORT"
+        }, "0,0,WEST")]//example b
+        [DataRow(new string[]{
+            "PLACE 1,2,EAST",
+            "MOVE",
+            "MOVE",
+            "LEFT",
+            "MOVE",
+            "REPORT"
+        },"3,3,NORTH")]//example c
+        [DataRow(new string[]{
+            "PLACE 2,4,EAST",
+            "MOVE",
+            "RIGHT",
+            "MOVE",
+            "RIGHT",
+            "MOVE",
+            "MOVE",
+            "LEFT",
+            "MOVE",
+            "REPORT"
+        }, "1,2,SOUTH")]
+        [DataRow(new string[]{
+            "PLACE 2,2,NORTH",
+            "MOVE",
+            "REPORT"
+        }, "2,3,NORTH")]
+        [DataRow(new string[]{
+            "PLACE 2,2,SOUTH",
+            "MOVE",
+            "REPORT"
+        }, "2,1,SOUTH")]
+        [DataRow(new string[]{
+            "PLACE 2,2,EAST",
+            "MOVE",
+            "REPORT"
+        }, "3,2,EAST")]
+        [DataRow(new string[]{
+            "PLACE 2,2,WEST",
+            "MOVE",
+            "REPORT"
+        }, "1,2,WEST")]
+        [DataTestMethod]
+        public void GameTests_RandomMove_CheckExpectedPosition_Equal(string[] events,string expectedPosition)
+        {
+            //int x=0,y=0;
+            //FacingDirection face=FacingDirection.WEST;
+            Game game = new Game();
+            foreach(string gameEvent in events)
+            {
+                GameEvent temp = new GameEvent(gameEvent);
+                game.ReceiveEvent(temp);
+            }
+            RobotPosition expectedPos= new RobotPosition(expectedPosition);
+            Assert.AreEqual(expectedPos.ToString(), game.ReportCurrentPosition());
+        }
     }
 }

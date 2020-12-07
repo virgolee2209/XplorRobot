@@ -23,7 +23,7 @@ namespace XplorRobot
                 }
                 try
                 {
-                    game.SendCommand(new GameEvent(command));
+                    game.ReceiveEvent(new GameEvent(command));
                 }
                 catch(Exception ex)
                 {

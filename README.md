@@ -80,7 +80,7 @@ Expected output:
 
 Expected output
 
-    3,3,NORTH
+    3,3,NORTH 
 
 Deliverables
 ------------

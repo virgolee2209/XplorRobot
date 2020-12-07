@@ -6,8 +6,8 @@ namespace RobotService
     public class RobotPosition
     {
         public FacingDirection Face { get; private set; }
-        public int PositionX { get; private set; }
         public int PositionY { get; private set; }
+        public int PositionX { get; private set; }
         public RobotPosition(string positionString)
         {
             string[] paramList = positionString.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
@@ -38,17 +38,17 @@ namespace RobotService
             switch (Face)
             {
                 case FacingDirection.EAST:
-                    PositionY++;
-                    break;
-                case FacingDirection.NORTH:
                     PositionX++;
                     break;
+                case FacingDirection.NORTH:
+                    PositionY++;
+                    break;
                 case FacingDirection.SOUTH:
-                    PositionX--;
+                    PositionY--;
                     break;
                 case FacingDirection.WEST:
                 default:
-                    PositionY--;
+                    PositionX--;
                     break;
             }
         }

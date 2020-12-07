@@ -130,50 +130,5 @@ namespace RobotService.Tests
             RobotPosition expectedPosition = new RobotPosition(original);
             Assert.AreEqual(expectedPosition.ToString(), position.ToString());
         }
-        [TestMethod]
-        public void RobotPosition_Move_MiddleFacingNorth_XIncreaseYStay()
-        {
-            int x = 2;
-            string original = $"{x},2,{FacingDirection.NORTH}";
-            string expected = $"{x+1},2,{FacingDirection.NORTH}";
-            RobotPosition position = new RobotPosition(original);
-            position.Move();
-            RobotPosition expectedPosition = new RobotPosition(expected);
-            Assert.AreEqual(expectedPosition.ToString(), position.ToString());
-        }
-        [TestMethod]
-        public void RobotPosition_Move_MiddleFacingEast_XStayYIncrease()
-        {
-            int y = 2;
-            string original = $"2,{y},{FacingDirection.EAST}";
-            string expected = $"2,{y+1},{FacingDirection.EAST}";
-            RobotPosition position = new RobotPosition(original);
-            position.Move();
-            RobotPosition expectedPosition = new RobotPosition(expected);
-            Assert.AreEqual(expectedPosition.ToString(), position.ToString());
-        }
-        [TestMethod]
-        public void RobotPosition_Move_MiddleFacingSouth_XDecreaseYStay()
-        {
-            int x = 2;
-            string original = $"{x},2,{FacingDirection.SOUTH}";
-            string expected = $"{x - 1},2,{FacingDirection.SOUTH}";
-            RobotPosition position = new RobotPosition(original);
-            position.Move();
-            RobotPosition expectedPosition = new RobotPosition(expected);
-            Assert.AreEqual(expectedPosition.ToString(), position.ToString());
-        }
-        [TestMethod]
-        public void RobotPosition_Move_MiddleFacingWest_XStayYDecrease()
-        {
-            int y = 2;
-            FacingDirection face = FacingDirection.WEST;
-            string original = $"2,{y},{face}";
-            string expected = $"2,{y - 1},{face}";
-            RobotPosition position = new RobotPosition(original);
-            position.Move();
-            RobotPosition expectedPosition = new RobotPosition(expected);
-            Assert.AreEqual(expectedPosition.ToString(), position.ToString());
-        }
     }
 }

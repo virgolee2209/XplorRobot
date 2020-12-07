@@ -43,12 +43,9 @@ namespace RobotService
                         break;
                     }
                 case Commands.REPORT:
-                    {
-                        ReportCurrentPosition();
-                        break;
-                    }
                 default:
                     {
+                        ReportCurrentPosition();
                         break;
                     }
             }

@@ -98,6 +98,7 @@ namespace RobotService.Tests
             while (count < 4)
             {
                 position.Turn();
+                count++;
             }
             
             RobotPosition expectedPosition = new RobotPosition(original);
@@ -123,6 +124,7 @@ namespace RobotService.Tests
             while (count < 4)
             {
                 position.Turn(isClockwise:false);
+                count++;
             }
 
             RobotPosition expectedPosition = new RobotPosition(original);
@@ -166,8 +168,8 @@ namespace RobotService.Tests
         {
             int y = 2;
             FacingDirection face = FacingDirection.WEST;
-            string original = $"2,{y}{face}";
-            string expected = $"2,{y + 1},{face}";
+            string original = $"2,{y},{face}";
+            string expected = $"2,{y - 1},{face}";
             RobotPosition position = new RobotPosition(original);
             position.Move();
             RobotPosition expectedPosition = new RobotPosition(expected);

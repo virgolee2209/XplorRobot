@@ -64,7 +64,7 @@ namespace RobotService
                 }
                 else
                 {
-                    Face = Face++;
+                    Face = (FacingDirection)((int)Face+1);
                 }
                 
             }
@@ -76,7 +76,7 @@ namespace RobotService
                 }
                 else
                 {
-                    Face = Face--;
+                    Face = (FacingDirection)((int)Face-1);
                 }
             }
         }

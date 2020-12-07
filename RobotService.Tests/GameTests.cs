@@ -61,8 +61,12 @@ namespace RobotService.Tests
         [DataRow(0,2, FacingDirection.WEST)]
         //[DataRow(0, new object[] { 2, "WEST" }, "Middle Left Position")]
         [DataTestMethod]
+        //[TestMethod]
         public void GameTests_PlaceRobotOnTheEdgeThenMove_GameRobotCannotMoveException(int x, int y, FacingDirection face)
+        //public void GameTests_PlaceRobotOnTheEdgeThenMove_GameRobotCannotMoveException()
         {
+            //int x=0,y=0;
+            //FacingDirection face=FacingDirection.WEST;
             Game game = new Game();
             string placeCommand = $"PLACE {x},{y},{face.ToString()}";
             //GameEvent placeRobotOnTheEdge = new GameEvent("PLACE 0,0,WEST");

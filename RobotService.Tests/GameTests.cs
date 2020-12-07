@@ -4,74 +4,74 @@ using System;
 namespace RobotService.Tests
 {
     [TestClass]
-    public class GameEventTests
+    public class GameTests
     {
         [TestMethod]
-        public void GameEvent_RandomText_InvalidCommand()
+        public void GameTests_NoPlace_Move_GameNotStartedException()
         {
-            string input = "test";
-            Assert.ThrowsException<GameCommandInvalidException>(()=>{
-                GameEvent gameEvent = new GameEvent(input);
+            Game game = new Game();
+            Assert.ThrowsException<GameNotStartedException>(()=> {
+                game.SendCommand(new GameEvent("move"));
             });
-            
-        }
-        [TestMethod]
-        public void GameEvent_EmptyText_InvalidCommand()
-        {
-            string input = "";
-            Assert.ThrowsException<GameCommandEmptyException>(()=>{
-                GameEvent gameEvent = new GameEvent(input);
-            });
-            
-        }
-        [TestMethod]
-        public void GameEvent_3parts_InvalidCommand()
-        {
-            string input = "place 0,0,N invalid";
-            Assert.ThrowsException<GameCommandInvalidFormatException>(()=>{
-                GameEvent gameEvent = new GameEvent(input);
-            },"wrong exception type");
-            
-        }
-        [TestMethod]
-        public void GameEvent_PlaceWithoutParam_InvalidCommand()
-        {
-            string input = "place";
-            Assert.ThrowsException<GameCommandInvalidParameterException>(()=>{
-                GameEvent gameEvent = new GameEvent(input);
-            },"invalid");
-            
-        }
-        [TestMethod]
-        public void GameEvent_MoveWithParam_InvalidCommand()
-        {
-            string input = "move 0,0,N";
-            Assert.ThrowsException<GameCommandInvalidParameterException>(()=>{
-                GameEvent gameEvent = new GameEvent(input);
-            },"wrong exception type");
-            
-        }
-        [TestMethod]
-        public void GameEvent_MOVE_ValidCommand()
-        {
-            string input = "move";
-            GameEvent gameEvent = new GameEvent(input);
-            Assert.AreEqual(Commands.MOVE, gameEvent.GetGameCommand());
-        }
-        [TestMethod]
-        public void GameEvent_MOVE_UpperCase_ValidCommand()
-        {
-            string input = "MOVE";
-            GameEvent gameEvent = new GameEvent(input);
-            Assert.AreEqual(Commands.MOVE, gameEvent.GetGameCommand());
-        }
-        [TestMethod]
-        public void GameEvent_MOVE_MixedCase_ValidCommand()
-        {
-            string input = "mOvE";
-            GameEvent gameEvent = new GameEvent(input);
-            Assert.AreEqual(Commands.MOVE, gameEvent.GetGameCommand());
         }
 
+        [TestMethod]
+        public void GameTests_NoPlace_Left_GameNotStartedException()
+        {
+            Game game = new Game();
+            Assert.ThrowsException<GameNotStartedException>(() => {
+                game.SendCommand(new GameEvent("left"));
+            });
+        }
+
+        [TestMethod]
+        public void GameTests_NoPlace_Right_GameNotStartedException()
+        {
+            Game game = new Game();
+            Assert.ThrowsException<GameNotStartedException>(() => {
+                game.SendCommand(new GameEvent("right"));
+            });
+        }
+
+        [TestMethod]
+        public void GameTests_NoPlace_Report_GameNotStartedException()
+        {
+            Game game = new Game();
+            Assert.ThrowsException<GameNotStartedException>(() => {
+                game.SendCommand(new GameEvent("report"));
+            });
+        }
+
+        [TestMethod]
+        public void GameTests_PlaceRobotOutOfRange_GameRobotPlaceOutsideTableException()
+        {
+            Game game = new Game();
+            GameEvent outOfRangeEvent = new GameEvent("PLACE 6,0,EAST");
+            Assert.ThrowsException<GameRobotPlaceOutsideTableException>(() => {
+                game.SendCommand(outOfRangeEvent);
+            });
+
+            outOfRangeEvent = new GameEvent("PLACE 0,6,EAST");
+            Assert.ThrowsException<GameRobotPlaceOutsideTableException>(() => {
+                game.SendCommand(outOfRangeEvent);
+            });
+        }
+
+        [TestMethod]
+        public void GameTests_PlaceRobotOnTheEdgeThenMove_GameRobotCannotMoveException()
+        {
+            Game game = new Game();
+            GameEvent placeRobotOnTheEdge = new GameEvent("PLACE 0,0,WEST");
+            game.SendCommand(placeRobotOnTheEdge);
+            GameEvent moveEvent = new GameEvent("MOVE");
+            Assert.ThrowsException<GameRobotCannotMoveException>(() => {
+                game.SendCommand(moveEvent);
+            });
+
+            placeRobotOnTheEdge = new GameEvent("PLACE 0,3,WEST");
+            Assert.ThrowsException<GameRobotCannotMoveException>(() => {
+                game.SendCommand(moveEvent);
+            });
+        }
     }
 }

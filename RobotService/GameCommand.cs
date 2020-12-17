@@ -2,11 +2,6 @@ using System;
 
 namespace RobotService
 {
-    public class GameCommand
-    {
-        
-        
-    }
     public enum Commands
     {
         PLACE,
